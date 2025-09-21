@@ -1,6 +1,90 @@
+# macOS
 .DS_Store
-/node_modules/
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
 
-# React Router
-/.react-router/
+# Dependencies
+/node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+
+# Environment variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build outputs
 /build/
+/dist/
+.next/
+.vite/
+
+# React Router v7
+/.react-router/
+
+# Logs
+logs/
+*.log
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory
+coverage/
+*.lcov
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+*.dump
+*.sql.backup
+
+# IDE/Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Windows
+ehthumbs.db
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+
+# TypeScript cache
+*.tsbuildinfo
+
+# ESLint cache
+.eslintcache
+
+# Docker
+docker-compose.override.yml
+
+# Cache directories
+.cache/
+.parcel-cache/
+
+# Optional npm cache directory
+.npm
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
