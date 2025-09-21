@@ -22,7 +22,7 @@ A multiplayer card game built with React, Node.js, TypeScript, and Phaser.
 1. Install dependencies:
 ```bash
    npm install
-
+```
 2. Set up PostgreSQL and create database bandit_baccarat
 
 3. Create .env file with your database credentials:
@@ -39,6 +39,7 @@ VITE_SERVER_URL=http://localhost:3001
 4. Run Development Server
 ```bash
     npm run dev
+```
 
 ## Project Structure
 ├── src/                 # Frontend React app
