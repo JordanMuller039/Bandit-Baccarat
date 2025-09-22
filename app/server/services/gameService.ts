@@ -350,15 +350,15 @@ export class GameService {
     return gameState;
   }
 
-  static rematch(gameId: string): GameState | null {
-    const gameState = this.games.get(gameId);
-    if (!gameState || gameState.phase !== 'finished') return null;
+  static async rematch(gameId: string): Promise<GameState | null> {
+  const gameState = this.games.get(gameId);
+  if (!gameState || gameState.phase !== 'finished') return null;
 
-    // Reset game state but keep players
-    const playerData = gameState.players.map(p => ({ id: p.id, username: p.username }));
-    const newGameState = this.createNewGame(gameId, playerData);
-    return newGameState;
-  }
+  // Reset game state but keep players
+  const playerData = gameState.players.map(p => ({ id: p.id, username: p.username }));
+  const newGameState = await this.createNewGame(gameId, playerData);
+  return newGameState;
+}
 
   static getGame(gameId: string): GameState | undefined {
     return this.games.get(gameId);

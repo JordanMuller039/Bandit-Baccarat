@@ -17,7 +17,7 @@ export interface Player {
 
 export interface GameState {
   gameId: string;
-  phase: 'waiting' | 'dealing' | 'selection' | 'quickdraw' | 'resolution' | 'drawing' | 'finished' | 'tiebreaker';
+  phase: 'waiting' | 'dealing' | 'selection' | 'quickdraw' | 'resolution' | 'drawing' | 'finished' | 'tiebreaker' | 'perfect_chamber'; // Added 'perfect_chamber'
   players: Player[];
   currentPlayer?: string; // whose turn it is
   quickDrawCaller?: string; // who called first
@@ -31,5 +31,6 @@ export interface GameState {
     diceRolls: { [playerId: string]: number };
     sharedPile: PlayingCard[];
     pickOrder: string[];
+    currentPicker?: string; // Added this missing property
   };
 }

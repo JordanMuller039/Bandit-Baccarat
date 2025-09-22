@@ -55,6 +55,13 @@ export default function GamePage() {
     return gameState.players.find(p => p.id === currentUser) || null;
   };
 
+  const handleRematch = () => {
+  if (!socket || !gameState) return;
+  
+  console.log("Starting rematch for game:", gameState.gameId);
+  socket.emit("rematch", { gameId: gameState.gameId });
+  };
+
   const getOpponent = (): Player | null => {
     if (!gameState || !currentUser) return null;
     return gameState.players.find(p => p.id !== currentUser) || null;
@@ -77,6 +84,16 @@ export default function GamePage() {
       action,
       playerId: currentUser 
     });
+  };
+
+  const handleRollDice = () => {
+  if (!socket || !gameState) return;
+  socket.emit("roll_dice", { gameId: gameState.gameId });
+  };
+
+const handlePickCard = (cardId: string) => {
+  if (!socket || !gameState) return;
+  socket.emit("pick_card", { gameId: gameState.gameId, cardId });
   };
 
   const renderCard = (card: PlayingCard, onClick?: () => void) => {
@@ -196,6 +213,57 @@ export default function GamePage() {
             </div>
           )}
 
+          {/* TIEBREAKER DICE ROLLING */}
+          {gameState.phase === 'tiebreaker' && gameState.tiebreaker?.phase === 'rolling' && currentPlayer && !gameState.tiebreaker.diceRolls[currentUser] && (
+          <div style={{ 
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            background: "rgba(139, 69, 19, 0.9)",
+            padding: "20px",
+            borderRadius: "10px",
+            color: "var(--aged-paper)",
+            textAlign: "center"
+          }}>
+            <h3>Roll the Dice!</h3>
+            <button 
+              className="western-btn"
+              onClick={handleRollDice}
+              style={{ marginTop: "10px" }}
+            >
+              🎲 Roll Dice
+            </button>
+          </div>
+        )}
+
+        {/* TIEBREAKER CARD PICKING */}
+        {gameState.phase === 'tiebreaker' && gameState.tiebreaker?.phase === 'picking' && gameState.tiebreaker.currentPicker === currentUser && (
+        <div style={{ 
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+          background: "rgba(139, 69, 19, 0.9)",
+          padding: "20px",
+          borderRadius: "10px",
+          color: "var(--aged-paper)",
+          textAlign: "center"
+        }}>
+          <h3>Pick a Card from the Pile</h3>
+          <div style={{ display: "flex", gap: "10px", marginTop: "15px", flexWrap: "wrap", justifyContent: "center" }}>
+            {gameState.tiebreaker.sharedPile.map((card) => (
+              <div
+                key={card.id}
+                className="playing-card face-down"
+                onClick={() => handlePickCard(card.id)}
+                style={{ cursor: "pointer" }}
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
           {gameState.phase === 'selection' && currentPlayer && !currentPlayer.selectedCard && (
             <div style={{ 
               position: "absolute",
@@ -239,6 +307,41 @@ export default function GamePage() {
             </div>
           )}
         </div>
+
+        {(gameState.phase === 'finished' || gameState.phase === 'perfect_chamber') && (
+  <div style={{ 
+    textAlign: "center", 
+    marginTop: "20px",
+    marginBottom: "20px"
+  }}>
+    <div className="western-card" style={{ 
+      background: "linear-gradient(135deg, var(--dusty-gold), var(--whiskey-amber))",
+      color: "var(--aged-paper)",
+      marginBottom: "20px"
+    }}>
+      <h3 style={{ 
+        margin: "0 0 15px 0",
+        textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)"
+      }}>
+        {gameState.lastAction}
+      </h3>
+      <button 
+        className="western-btn"
+        onClick={handleRematch}
+        style={{ 
+          background: "linear-gradient(135deg, var(--aged-paper), var(--desert-sand))",
+          color: "var(--dark-wood)",
+          borderColor: "var(--leather-brown)",
+          fontSize: "18px",
+          padding: "15px 30px",
+          fontWeight: "bold"
+        }}
+      >
+        🔫 Challenge Again!
+      </button>
+    </div>
+  </div>
+)}
 
         {/* Game Controls */}
         <div style={{ textAlign: "center", marginTop: "20px" }}>
