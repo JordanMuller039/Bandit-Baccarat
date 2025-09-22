@@ -205,32 +205,33 @@ export class LobbyService {
   }
 
   static async startGame(lobbyId: string, userId: string): Promise<{ success: boolean; message?: string }> {
-    try {
-      // Check if user is the lobby creator
-      const lobby = await this.getLobbyById(lobbyId);
-      
-      if (!lobby) {
-        return { success: false, message: 'Lobby not found' };
-      }
-      
-      if (lobby.created_by !== userId) {
-        return { success: false, message: 'Only the lobby creator can start the game' };
-      }
-      
-      if (lobby.players.length < 2) {
-        return { success: false, message: 'Need at least 2 players to start the game' };
-      }
-      
-      // Update lobby status to playing
-      await pool.query(
-        'UPDATE lobbies SET status = $1 WHERE id = $2',
-        ['playing', lobbyId]
-      );
-      
-      return { success: true };
-    } catch (error) {
-      console.error('Start game error:', error);
-      return { success: false, message: 'Failed to start game' };
+  try {
+    // Check if user is the lobby creator
+    const lobby = await this.getLobbyById(lobbyId);
+    
+    if (!lobby) {
+      return { success: false, message: 'Lobby not found' };
     }
+    
+    if (lobby.created_by !== userId) {
+      return { success: false, message: 'Only the lobby creator can start the game' };
+    }
+    
+    if (lobby.players.length < 2) {
+      return { success: false, message: 'Need at least 2 players to start the game' };
+    }
+    
+    // Update lobby status to playing
+    await pool.query(
+      'UPDATE lobbies SET status = $1 WHERE id = $2',
+      ['playing', lobbyId]
+    );
+    
+    console.log(`✅ Game started for lobby ${lobbyId} with ${lobby.players.length} players`);
+    return { success: true };
+  } catch (error) {
+    console.error('Start game error:', error);
+    return { success: false, message: 'Failed to start game' };
   }
+}
 }

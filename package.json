@@ -24,7 +24,8 @@
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.26.1",
     "socket.io": "^4.8.1",
-    "socket.io-client": "^4.8.1"
+    "socket.io-client": "^4.8.1",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.1.4",
@@ -36,6 +37,7 @@
     "@types/pg": "^8.15.5",
     "@types/react": "^18.2.79",
     "@types/react-dom": "^18.2.23",
+    "@types/uuid": "^10.0.0",
     "concurrently": "^9.2.1",
     "nodemon": "^3.1.10",
     "tailwindcss": "^4.1.4",
