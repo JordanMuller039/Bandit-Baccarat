@@ -7,7 +7,8 @@ import dotenv from 'dotenv';
 
 import { initializeDatabase } from './database/init.js';
 import authRoutes from './routes/auth.js';
-import { setupSocketHandlers } from './socket/handlers.js';  
+import profileRoutes from './routes/profile.js'; 
+import { setupSocketHandlers } from './socket/handlers.js';
 
 dotenv.config();
 
@@ -32,6 +33,7 @@ app.use(express.json());
 
 // Routes
 app.use('/api/auth', authRoutes);
+app.use('/api', profileRoutes); // Add this line
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -54,7 +56,7 @@ io.on('connection', (socket) => {
 async function startServer() {
   try {
     await initializeDatabase();
-    
+        
     server.listen(PORT, () => {
       console.log(`🚀 Server running on port ${PORT}`);
       console.log(`🌐 CORS enabled for: ${process.env.CORS_ORIGIN}`);
