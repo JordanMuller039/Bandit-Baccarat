@@ -7,7 +7,7 @@ import dotenv from 'dotenv';
 
 import { initializeDatabase } from './database/init.js';
 import authRoutes from './routes/auth.js';
-import profileRoutes from './routes/profile.js'; 
+import profileRoutes from './routes/profile.js'; // Make sure this line exists
 import { setupSocketHandlers } from './socket/handlers.js';
 
 dotenv.config();
@@ -31,9 +31,10 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Routes
+// Routes - ORDER MATTERS!
 app.use('/api/auth', authRoutes);
-app.use('/api', profileRoutes); // Add this line
+app.use('/api', profileRoutes); 
+
 
 // Health check
 app.get('/api/health', (req, res) => {
@@ -51,6 +52,7 @@ io.on('connection', (socket) => {
     console.log('🔴 Raw socket disconnected:', socket.id);
   });
 });
+
 
 // Start server
 async function startServer() {

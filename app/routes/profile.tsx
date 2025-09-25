@@ -58,10 +58,10 @@ function ProfileContent() {
   const fetchProfileData = async () => {
     try {
       const [statsRes, badgesRes, friendsRes, requestsRes] = await Promise.all([
-        fetch('/api/profile/stats', { headers: { Authorization: `Bearer ${token}` } }),
-        fetch('/api/profile/badges', { headers: { Authorization: `Bearer ${token}` } }),
-        fetch('/api/profile/friends', { headers: { Authorization: `Bearer ${token}` } }),
-        fetch('/api/profile/friend-requests', { headers: { Authorization: `Bearer ${token}` } })
+        fetch('http://localhost:3001/api/profile/stats', { headers: { Authorization: `Bearer ${token}` } }),
+        fetch('http://localhost:3001/api/profile/badges', { headers: { Authorization: `Bearer ${token}` } }),
+        fetch('http://localhost:3001/api/profile/friends', { headers: { Authorization: `Bearer ${token}` } }),
+        fetch('http://localhost:3001/api/profile/friend-requests', { headers: { Authorization: `Bearer ${token}` } })
       ]);
 
       if (statsRes.ok) {
@@ -92,22 +92,34 @@ function ProfileContent() {
 
   const searchUsers = async () => {
     if (!searchQuery.trim()) return;
+    
+    console.log('Searching for:', searchQuery);
+    
     try {
-      const res = await fetch(`/api/users/search?q=${encodeURIComponent(searchQuery)}`, {
+      const res = await fetch(`http://localhost:3001/api/users/search?q=${encodeURIComponent(searchQuery)}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
+      
+      console.log('Search response status:', res.status);
+      
       if (res.ok) {
         const results = await res.json();
+        console.log('Search results:', results);
         setSearchResults(results);
+      } else {
+        const errorData = await res.json();
+        console.error('Search error:', errorData);
+        alert(`Search failed: ${errorData.error || 'Unknown error'}`);
       }
     } catch (error) {
       console.error('Search failed:', error);
+      alert('Search failed. Check console for details.');
     }
   };
 
   const sendFriendRequest = async (userId: number) => {
     try {
-      const res = await fetch('/api/friends/request', {
+      const res = await fetch('http://localhost:3001/api/friends/request', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -131,13 +143,13 @@ function ProfileContent() {
 
   const acceptFriendRequest = async (requestId: number) => {
     try {
-      const res = await fetch(`/api/friends/accept/${requestId}`, {
+      const res = await fetch(`http://localhost:3001/api/friends/accept/${requestId}`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` }
       });
       
       if (res.ok) {
-        fetchProfileData(); // Refresh data
+        fetchProfileData();
       }
     } catch (error) {
       console.error('Failed to accept friend request:', error);
